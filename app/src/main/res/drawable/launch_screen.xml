@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+
+    <!-- The background colorably the s, preferably as the normal theme -->
+    <item android:drawable="@android:color/white"/>
+    <!-- Crimen logo - 144dp color version of your app icon -->
+    <item>
+        <bitmap
+            android:src="@drawable/splash_screen"
+            android:gravity="center"/>
+    </item>
+</layer-list>
