@@ -30,7 +30,7 @@ Functionality
 * Explore - safest places; turn on alert features
 * Safest route - find the safest route from point to point
 * Settings - give options for things to turn on/off specific crimes
-* Discover - premium options: crime reports, crime statistic presented beautifully, crime reports, news reports
+* Discover - premium options: crime reports, crime statistic presented beautifully, news reports
 
 3. Map Options 
 
