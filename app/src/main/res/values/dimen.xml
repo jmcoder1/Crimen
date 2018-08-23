@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Dimensions (padding/margin/inset) for the persistent search bar (floating_searchview)-->
+    <dimen name="floating_searchview_inset">8dp</dimen>
+</resources>

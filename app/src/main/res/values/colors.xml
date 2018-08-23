@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3048cc</color>
     <color name="colorPrimaryDark">#00219a</color>
     <color name="colorAccent">#3048cc</color>
+
+    <!-- Colours for the floating search view -->
+    <color name="floating_searchview_txt_color">#ffffff</color>
 </resources>
