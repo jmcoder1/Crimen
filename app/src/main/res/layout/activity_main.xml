@@ -21,4 +21,7 @@
         app:floatingSearch_close_search_on_keyboard_dismiss="true"
         style="@style/SearchView"/>
 
+
+
+
 </android.support.constraint.ConstraintLayout>
