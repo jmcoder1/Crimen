@@ -2,5 +2,6 @@
 <resources>
 
     <!-- Dimensions (padding/margin/inset) for the persistent search bar (floating_searchview)-->
-    <dimen name="floating_searchview_inset">8dp</dimen>
+    <dimen name="searchview_inset">8dp</dimen>
+    <dimen name="search_view_corner_radius">3dp</dimen>
 </resources>

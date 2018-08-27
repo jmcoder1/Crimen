@@ -4,5 +4,5 @@
     <string name="app_name">Crimen</string>
 
     <!-- Strings floating search view -->
-    <string name="floating_searchview_hint">Search here...</string>
+    <string name="searchview_hint">Search here...</string>
 </resources>

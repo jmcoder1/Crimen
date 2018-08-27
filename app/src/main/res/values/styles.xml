@@ -13,17 +13,4 @@
         <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
 
-    <!-- Style for the floating searchview -->
-    <style name="SearchView">
-        <item name="floatingSearch_backgroundColor">@color/colorPrimary</item>
-        <item name="floatingSearch_viewSearchInputTextColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_viewSuggestionItemTextColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_hintTextColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_dividerColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_clearBtnColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_leftActionColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_menuItemIconColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_suggestionRightIconColor">@color/floating_searchview_txt_color</item>
-        <item name="floatingSearch_actionMenuOverflowColor">@color/floating_searchview_txt_color</item>
-    </style>
 </resources>
