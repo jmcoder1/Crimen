@@ -6,51 +6,54 @@ import android.os.Bundle;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    // The floating search bar that remains at the top of the application
-    private FloatingSearchView mFloatingSearchView;
+    // The floating search bar that remains at the top
+    private PlaceAutocompleteFragment autocompleteFragment;
 
     // The Google Place API request code
     private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
+    // The Log Tag for debugging and writing log messages
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Make sure this is before calling super.onCreate
+        // Code for the splash screen
+        // Must be set before super.onCreate()
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Handles what happens with the floating searchview
-        mFloatingSearchView = findViewById(R.id.floating_search_view);
+        autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-        mFloatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(LOG_TAG, "Place: " + place.getName());
+            }
 
-                try {
-                    Intent intent =
-                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                                    .build(MainActivity.this);
-                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                } catch (GooglePlayServicesRepairableException e) {
-                    // TODO: Handle the error.
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    // TODO: Handle the error.
-                }
-
-                //get suggestions based on newQuery
-
-                //pass them on to the search view
-                //mFloatingSearchView.swapSuggestions(newSuggestions);
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(LOG_TAG, "An error occurred: " + status);
             }
         });
+
     }
 }
