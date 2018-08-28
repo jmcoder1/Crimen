@@ -9,6 +9,19 @@
     <!-- Strings floating search view -->
     <string name="searchview_hint">Search here...</string>
 
+
     <!-- Image attribution strings -->
-    <string name="attribution_todo">TODO</string>
+        <!-- Placeholder content attribution strings -->
+        <string name="attribution_todo">TODO</string>
+
+        <!-- ImageView content attribution for the crime adapter attribution. -->
+        <string name="crime_icon_attribution">Placeholder image relating to the type of crime retrieved.</string>
+
+    <!-- Text for when there are problems fetching information. -->
+        <!-- Text for when there is no internet connection. -->
+        <string name="no_connectivity">No internet connection.</string>
+
+        <!-- Text for when there is no data to fetch. -->
+        <string name="no_crime_data">No crime data found.</string>
+
 </resources>

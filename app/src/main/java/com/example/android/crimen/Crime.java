@@ -6,10 +6,10 @@ public class Crime {
     private String mCategory;
 
     // The latitude of the crime that was recorded
-    private Long mLatitude;
+    private String mLatitude;
 
     // The longitude of the crime that was recorded
-    private Long mLongitude;
+    private String mLongitude;
 
     // The name of the strret that the crime was approximated to be recorded
     private String mStreetName;
@@ -33,7 +33,7 @@ public class Crime {
     * @param streetName The name of the street the crime was approximately recorded at.
     * @param date The date of the crime (YYYY-MM).
      */
-    public Crime(String category, Long latitude, Long longitude, String streetName, String date) {
+    public Crime(String category, String latitude, String longitude, String streetName, String date) {
         mCategory = category;
         mLatitude = latitude;
         mLongitude = longitude;
@@ -64,7 +64,7 @@ public class Crime {
     *
     * @return The latitude of the crime.
      */
-    public Long getLatitude() {
+    public String getLatitude() {
         return mLatitude;
     }
 
@@ -73,7 +73,7 @@ public class Crime {
     *
     * @param The latitude of the crime.
      */
-    public void setLatitude(Long latitude) {
+    public void setLatitude(String latitude) {
         mLatitude = latitude;
     }
 
@@ -82,7 +82,7 @@ public class Crime {
     *
     * @return The longitude of the crime.
      */
-    public Long getLongitude() {
+    public String getLongitude() {
         return mLongitude;
     }
 
@@ -91,7 +91,7 @@ public class Crime {
     *
     * @param The longitude of the crime.
      */
-    public void setLongitude(Long longitude) {
+    public void setLongitude(String longitude) {
         mLongitude = longitude;
     }
 

@@ -27,7 +27,7 @@ import java.util.Date;
 
 public class CrimeAdapter extends ArrayAdapter<Crime> {
 
-    // The TAG used for debugging and logging activity to the logcat
+    // The TAG used for logging and debugging activity
     private static final String LOG_TAG = CrimeAdapter.class.getSimpleName();
 
     /**
@@ -66,7 +66,7 @@ public class CrimeAdapter extends ArrayAdapter<Crime> {
         }
 
         // Get the {@link Crime} object located at this position in the list
-        Crime currentEarthquake = getItem(position);
+        Crime currentCrime = getItem(position);
 
         // Find the ImageView in the list_item.xml layout with the crime icon
         ImageView crimeIconImageView = (ImageView) listItemView.findViewById(R.id.crimeIcon);
@@ -74,34 +74,34 @@ public class CrimeAdapter extends ArrayAdapter<Crime> {
         // Find the TextView in the list_item.xml layout with the ID for the 'crimeStreetName'
         TextView crimeStreetNameTextView = (TextView) listItemView.findViewById(R.id.crimeStreetName);
         // Sets the crime street name of the cimr to the TextView
-        String crimeStreetName = currentEarthquake.getStreetName();
+        String crimeStreetName = currentCrime.getStreetName();
         crimeStreetNameTextView.setText(crimeStreetName);
 
         // Find the TextView in the list_item.xml layout with the ID for the 'crime category'
         TextView crimeCategoryTextView = (TextView) listItemView.findViewById(R.id.crimeCategory);
         // Sets the category of the crime to the TextView
-        String crimeCategory = currentEarthquake.getCategory();
+        String crimeCategory = currentCrime.getCategory();
         crimeCategoryTextView.setText(crimeCategory);
 
         // Find the TextView in the list_item.xml layout with the ID for the 'date'
         TextView crimeDateTextView = (TextView) listItemView.findViewById(R.id.crimeDate);
         // Sets the date of the crime to the TextView
-        String crimeDate = currentEarthquake.getDate();
+        String crimeDate = currentCrime.getDate();
         crimeDateTextView.setText(crimeDate);
 
         // Find the TextView in the list_item.xml layout with the ID for the 'latitude'
         TextView crimeLatitudeTextView = (TextView) listItemView.findViewById(R.id.crimeLatitude);
         // Sets latitude of the crime to the TextView
-        Long crimeLatitude = currentEarthquake.getLatitude();
-        crimeLatitudeTextView.setText(String.format("%d", crimeLatitude));
+        String crimeLatitude = currentCrime.getLatitude();
+        crimeLatitudeTextView.setText(crimeLatitude);
 
         // Find the TextView in the list_item.xml iwth the ID for the 'longitude'
         TextView crimeLongitudeTextView = (TextView) listItemView.findViewById(R.id.crimeLongitude);
         // Sets the longitude of the crime to the TextView
-        Long crimeLongitude = currentEarthquake.getLongitude();
-        crimeLongitudeTextView.setText(String.format("%d", crimeLongitude));
+        String crimeLongitude = currentCrime.getLongitude();
+        crimeLongitudeTextView.setText(crimeLongitude);
 
-        // Return the whole list item layout (containing a TextViews and an ImageView)
+        // Return the whole list item layout (containing TextViews and an ImageView)
         // so that it can be shown in the ListView
         return listItemView;
     }

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Dimensions (padding/margin/inset) for the persistent search bar (floating_searchview)-->
+    <!-- Autcomplete dimensions for the persistent search bar -->
+
+    <!-- Padding for the autcomplete search bar floating at the top. -->
     <dimen name="searchview_inset">8dp</dimen>
+
+    <!-- Radius for the card view behind the autocomplete search bar -->
     <dimen name="search_view_corner_radius">3dp</dimen>
 </resources>

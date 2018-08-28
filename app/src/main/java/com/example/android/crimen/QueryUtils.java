@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper methods related to requesting and receiving earthquake data from USGS.
+ * Helper methods related to requesting and receiving earthquake data from data.police.uk.
  */
 public final class QueryUtils {
 
@@ -32,10 +32,10 @@ public final class QueryUtils {
     }
 
     // The tag for logging and debugging
-    public static final String LOG_TAG = QueryUtils.class.getSimpleName();
+    private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     /**
-     * Query the police.data.uk dataset and return a list of {@link Crime} objects.
+     * Query the data.police.uk url and return a list of {@link Crime} objects.
      */
     public static List<Crime> fetchCrimeData(String requestUrl) {
         // Create URL object
@@ -130,18 +130,17 @@ public final class QueryUtils {
      * parsing a JSON response.
      * parsing the given JSON response.
      */
-    private static List<Crime> extractFeatureFromJson(String crimeJSON) {
+    private static List<Crime> extractFeatureFromJson(String crimesJSONResponse) {
         // If the JSON string is empty or null, then return early.
-        if (TextUtils.isEmpty(crimeJSON)) {
+        if (TextUtils.isEmpty(crimesJSONResponse)) {
             return null;
         }
         List<Crime> crimes = new ArrayList<>();
         // Try to parse the JSON response string. If there's a problem with the way the JSON
 
         try {
-            // Create a JSONObject from the JSON response string
-            JSONObject baseJsonResponse = new JSONObject(crimeJSON);
-            JSONArray crimeJSONArray = new JSONArray(baseJsonResponse);
+            // Create a JSONArray from the crime JSON response string.
+            JSONArray crimeJSONArray = new JSONArray(crimesJSONResponse);
 
             // For each crime in the JSON array, create an {@link Crime} object
             for (int i = 0; i < crimeJSONArray.length(); i++) {
@@ -149,28 +148,29 @@ public final class QueryUtils {
                 // Get a single crime at position i within the list of crimes
                 JSONObject currentCrime = crimeJSONArray.getJSONObject(i);
 
-                // Extract the crime category from the url
+                // Extract the crime category from the current crime
                 String category = currentCrime.getString("category");
 
-                JSONObject location = currentCrime.getJSONObject("location");
+                // Extract the location JSONObject from the JSONArray with location information
                 // Extract the value for the key called latitude
-                Long latitude = Long.parseLong( location.getString("latitude"));
-
                 // Extract the value for the key called longitude
-                Long longitude = Long.parseLong(location.getString("longitude"));
+                JSONObject location = currentCrime.getJSONObject("location");
+                String latitude = location.getString("latitude");
+                String longitude = location.getString("longitude");
 
-                JSONObject streetLocation = location.getJSONObject("street");
+                // Extract the street location JSONObject from the location JSON Object
                 // Extract the value for the key called street name
-                String streetName = streetLocation.getString("street");
+                JSONObject streetLocation = location.getJSONObject("street");
+                String streetName = streetLocation.getString("name");
 
-                // Extract the value for the key called date (month)
+                // Extract the value for the key called date (month) from the current crime
                 String date = currentCrime.getString("month");
 
-                // Create a new {@link Crime} object with the magnitude, location, time,
-                // and url from the JSON response.
+                // Create a new {@link Crime} object with the category, latitude, longitude
+                // streetName, and date from the JSON response.
                 Crime crime = new Crime(category, latitude, longitude, streetName, date);
 
-                // Add the new {@link Earthquake} to the list of earthquakes.
+                // Add the new {@link Crime} to the list of crimes.
                 crimes.add(crime);
             }
 
@@ -178,10 +178,10 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the crime JSON results", e);
         }
 
-        // Return the list of earthquakes
+        // Return the list of crimes
         return crimes;
     }
 }
