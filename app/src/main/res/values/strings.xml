@@ -3,6 +3,9 @@
     <!-- Application name -->
     <string name="app_name">Crimen</string>
 
+    <!-- String for the activity -->
+    <string name="crime_activity">CrimeActivity</string>
+
     <!-- Strings floating search view -->
     <string name="searchview_hint">Search here...</string>
 

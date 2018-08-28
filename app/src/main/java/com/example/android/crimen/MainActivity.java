@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+
+                Intent crimesIntent = new Intent(MainActivity.this, CrimeActivity.class);
+                startActivity(crimesIntent);
+
                 // TODO: Get info about the selected place.
                 Log.i(LOG_TAG, "Place: " + place.getName());
             }
