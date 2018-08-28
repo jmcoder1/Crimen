@@ -5,4 +5,7 @@
 
     <!-- Strings floating search view -->
     <string name="searchview_hint">Search here...</string>
+
+    <!-- Image attribution strings -->
+    <string name="attribution_todo">TODO</string>
 </resources>
