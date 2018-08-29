@@ -15,6 +15,7 @@ Competition:
 3. SpotCrime
 4. CrimeMap
 5. Crime Map
+6. Neighborhoodscout
 
 * Looks at competition for UI/UX inpsiration
 * Only improve on a feature, never just flat out copy
