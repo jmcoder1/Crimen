@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Application name -->
     <string name="app_name">Crimen</string>
@@ -7,7 +7,7 @@
     <string name="crime_activity">CrimeActivity</string>
 
     <!-- Strings floating search view -->
-    <string name="searchview_hint">Search here...</string>
+    <string name="searchview_hint">Search here&#8230;</string>
 
 
     <!-- Image attribution strings -->
@@ -24,4 +24,17 @@
         <!-- Text for when there is no data to fetch. -->
         <string name="no_crime_data">No crime data found.</string>
 
+    <!-- Strings for the data request URLs -->
+        <!-- String for crime at the specific location-->
+
+        <string name="crime_at_location_url" formatted="false">https://data.police.uk/api/crimes-at-location?date=%s&amp;;lat=%1$f&amp;lng=%2$f
+        </string>
+
+        <!--
+        <string name="crime_at_location_url" formatted="false">https://data.police.uk/api/crimes-at-location?date=
+            <xliff:g id="date" examples="2018-02">%1$s</xliff:g>&amp;;lat=
+            <xliff:g id="latitude" examples="52.629909">%1$d</xliff:g>&amp;lng=
+            <xliff:g id="longitude" examples="-1.132073">%2$d</xliff:g>
+        </string>
+        -->
 </resources>

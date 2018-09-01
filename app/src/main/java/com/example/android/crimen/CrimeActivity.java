@@ -36,7 +36,11 @@ public class CrimeActivity extends AppCompatActivity
     public static final String LOG_TAG = CrimeActivity.class.getName();
 
     // The string for the URL request
-    private static final String CRIME_DATA_REQ = "https://data.police.uk/api/crimes-at-location?date=2017-02&lat=52.629729&lng=-1.131592";
+    // TODO: Remove this placeholder if all works
+    //private static final String CRIME_DATA_REQ = "https://data.police.uk/api/crimes-at-location?date=2017-02&lat=52.629729&lng=-1.131592";
+
+    // The string for the URL request
+    private String mCrimeDataRequest;
 
     // The Crime array adapter
     private CrimeAdapter mAdapter;
@@ -45,12 +49,17 @@ public class CrimeActivity extends AppCompatActivity
     private TextView mEmptyDataTextView;
 
     // The ProgressBar view that appears when handling an event takes to long
-    ProgressBar progressBar;
+    ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.crimes_activity);
+
+        // Gets bundle from the intent containing data about the HTTP request
+        Intent i = getIntent();
+        Bundle b = i.getBundleExtra("urlDataBundle");
+        mCrimeDataRequest = b.getString("url");
 
         // Create a connectivityManager that handles connection to the internet
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -59,7 +68,7 @@ public class CrimeActivity extends AppCompatActivity
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         // Find a reference to the progress bar view
-        progressBar = (ProgressBar) findViewById(R.id.loading_spinner);
+        mProgressBar = (ProgressBar) findViewById(R.id.loading_spinner);
 
         // Create a new {@link ArrayAdapter} of crimes
         mAdapter = new CrimeAdapter(this, new ArrayList<Crime>());
@@ -94,7 +103,7 @@ public class CrimeActivity extends AppCompatActivity
             loaderManager.initLoader(CRIME_LOADER_ID, null, this);
         } else {
             mEmptyDataTextView.setText(R.string.no_connectivity);
-            progressBar.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
 
     }
@@ -110,7 +119,7 @@ public class CrimeActivity extends AppCompatActivity
      */
     @Override
     public Loader<List<Crime>> onCreateLoader(int i, Bundle bundle) {
-        return new CrimeLoader(this, CRIME_DATA_REQ);
+        return new CrimeLoader(this, mCrimeDataRequest);
     }
 
     /*
@@ -128,7 +137,7 @@ public class CrimeActivity extends AppCompatActivity
         mEmptyDataTextView.setText(R.string.no_crime_data);
 
         // Sets the progressBar to invisible once the CrimeLoader has finished querying
-        progressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         // Clear the adapter of previous crime data
         mAdapter.clear();
