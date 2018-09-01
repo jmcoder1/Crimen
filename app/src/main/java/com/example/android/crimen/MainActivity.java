@@ -104,13 +104,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private String getUrlFromPlace(Place place, String month) {
         LatLng placeLatLng = place.getLatLng();
-        double latitude = placeLatLng.latitude;
-        double longitude = placeLatLng.longitude;
+        double latitude = roundDecimalNumber(placeLatLng.latitude, ROUND_LATLNG_TO);
+        double longitude = roundDecimalNumber(placeLatLng.longitude, ROUND_LATLNG_TO);
         Log.e(LOG_TAG, "Pressed Place Longitude: " + longitude);
         Log.e(LOG_TAG, "Pressed Place Latitude: " + latitude);
 
-        //TODO Change from string concatenation to xliff tags
-        String url = "https://data.police.uk/api/crimes-at-location?date=" + DATE  +"&lat=" + roundDecimalNumber(latitude, ROUND_LATLNG_TO) + "&lng=" + roundDecimalNumber(longitude,ROUND_LATLNG_TO);
+        String url = getString(R.string.crime_at_location_url, DATE, latitude, longitude);
         Log.e(LOG_TAG, "Request url: " + url);
 
         return url;

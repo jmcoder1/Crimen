@@ -15,26 +15,20 @@
         <string name="attribution_todo">TODO</string>
 
         <!-- ImageView content attribution for the crime adapter attribution. -->
-        <string name="crime_icon_attribution">Placeholder image relating to the type of crime retrieved.</string>
+        <string name="crime_icon_attribution" >Placeholder image for crime specific markers to be
+        added to the map later on.</string>
 
     <!-- Text for when there are problems fetching information. -->
         <!-- Text for when there is no internet connection. -->
-        <string name="no_connectivity">No internet connection.</string>
+        <string name="no_connectivity" translatable="true">No internet connection.</string>
 
         <!-- Text for when there is no data to fetch. -->
-        <string name="no_crime_data">No crime data found.</string>
+        <string name="no_crime_data" translatable="true">No crime data found.</string>
 
     <!-- Strings for the data request URLs -->
         <!-- String for crime at the specific location-->
-
-        <string name="crime_at_location_url" formatted="false">https://data.police.uk/api/crimes-at-location?date=%s&amp;;lat=%1$f&amp;lng=%2$f
+        <string name="crime_at_location_url" translatable="false">
+            https://data.police.uk/api/crimes-at-location?date=%s&amp;lat=%f&amp;lng=%f
         </string>
 
-        <!--
-        <string name="crime_at_location_url" formatted="false">https://data.police.uk/api/crimes-at-location?date=
-            <xliff:g id="date" examples="2018-02">%1$s</xliff:g>&amp;;lat=
-            <xliff:g id="latitude" examples="52.629909">%1$d</xliff:g>&amp;lng=
-            <xliff:g id="longitude" examples="-1.132073">%2$d</xliff:g>
-        </string>
-        -->
 </resources>
