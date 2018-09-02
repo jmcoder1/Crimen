@@ -16,21 +16,29 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.text.DecimalFormat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     // The Google Place API request code
     private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     // Country code ot restrict the autocomplete fragment
     private static final String COUNTRY_BOUND = "GB";
+
+    // The lat/lng values the Google Map camera should open on
+    private static final LatLng OPENING_LOCATION_LATLNG = new LatLng(51.507351, -0.127758);
 
     // The Log Tag for debugging and writing log messages
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -48,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     // The floating search bar that remains at the top
     private PlaceAutocompleteFragment mAutocompleteFragment;
 
+    //
+    private GoogleMap mMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Code for the splash screen
@@ -56,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        // Get the floating search bar view
         mAutocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
@@ -67,14 +84,15 @@ public class MainActivity extends AppCompatActivity {
 
         mAutocompleteFragment.setFilter(autocompleteFilter);
 
+        // Activity for when a place is from the search bar
         mAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 LatLng placeLatLng = place.getLatLng();
                 mRequestUrl = getUrlFromPlace(place, DATE);
-                // TODO: Get info about the selected place.
 
-                // Brings up information about the specific crime at the chosen place.
+                // Gets information about crime at the chosen Place
+                // Passes the location specific information on
                 Intent crimesIntent = new Intent(MainActivity.this, CrimeActivity.class);
                 Bundle b = new Bundle();
                 b.putString("url", mRequestUrl);
@@ -93,6 +111,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng london = OPENING_LOCATION_LATLNG;
+        mMap.addMarker(new MarkerOptions().position(london).title("Marker in London"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(london));
+    }
+
     /*
     * This method gets the URL for the HTTP request respective to the place selected by the user.
     *
@@ -106,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
         LatLng placeLatLng = place.getLatLng();
         double latitude = roundDecimalNumber(placeLatLng.latitude, ROUND_LATLNG_TO);
         double longitude = roundDecimalNumber(placeLatLng.longitude, ROUND_LATLNG_TO);
-        Log.e(LOG_TAG, "Pressed Place Longitude: " + longitude);
-        Log.e(LOG_TAG, "Pressed Place Latitude: " + latitude);
+        Log.e(LOG_TAG, "Place longitude: " + longitude);
+        Log.e(LOG_TAG, "Place latitude: " + latitude);
 
         String url = getString(R.string.crime_at_location_url, DATE, latitude, longitude);
         Log.e(LOG_TAG, "Request url: " + url);

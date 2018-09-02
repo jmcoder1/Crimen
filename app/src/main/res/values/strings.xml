@@ -11,24 +11,25 @@
 
 
     <!-- Image attribution strings -->
-        <!-- Placeholder content attribution strings -->
-        <string name="attribution_todo">TODO</string>
+    <!-- Placeholder content attribution strings -->
+    <string name="attribution_todo">TODO</string>
 
-        <!-- ImageView content attribution for the crime adapter attribution. -->
-        <string name="crime_icon_attribution" >Placeholder image for crime specific markers to be
+    <!-- ImageView content attribution for the crime adapter attribution. -->
+    <string name="crime_icon_attribution">Placeholder image for crime specific markers to be
         added to the map later on.</string>
 
     <!-- Text for when there are problems fetching information. -->
-        <!-- Text for when there is no internet connection. -->
-        <string name="no_connectivity" translatable="true">No internet connection.</string>
+    <!-- Text for when there is no internet connection. -->
+    <string name="no_connectivity" translatable="true">No internet connection.</string>
 
-        <!-- Text for when there is no data to fetch. -->
-        <string name="no_crime_data" translatable="true">No crime data found.</string>
+    <!-- Text for when there is no data to fetch. -->
+    <string name="no_crime_data" translatable="true">No crime data found.</string>
 
     <!-- Strings for the data request URLs -->
-        <!-- String for crime at the specific location-->
-        <string name="crime_at_location_url" translatable="false">
+    <!-- String for crime at the specific location-->
+    <string name="crime_at_location_url" translatable="false">
             https://data.police.uk/api/crimes-at-location?date=%s&amp;lat=%f&amp;lng=%f
         </string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
