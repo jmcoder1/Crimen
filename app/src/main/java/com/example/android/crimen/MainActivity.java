@@ -20,16 +20,20 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
+
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -39,12 +43,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     // The Google Place API request code
-    private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     // Country code ot restrict the autocomplete fragment
     private static final String COUNTRY_BOUND = "GB";
@@ -58,9 +65,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // The error to handle if the user does not have the correct version of Google Play services
     private static final int EROOR_DIALOG_REQUEST = 9001;
 
-    // Android Manifest permissions
+    // Shorthand for the android manifest location permissions
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+
+    // Android Manifest location permission request code
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
     // The number of decimal places to the latitude and longitude values to
@@ -79,12 +88,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //
     private GoogleMap mMap;
 
-    //
-    private boolean mLocationPermissionGranted  = false;
+    // This variables tracks if location permissions have been granted
+    private boolean mLocationPermissionGranted = false;
+
+    private FusedLocationProviderClient mFusedLocatonProviderClient;
+
+    // The default initial zoom of the map
+    private static final float DEFAULT_ZOOM = 15f;
 
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
+     * Manipulates the map once available. This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
@@ -93,25 +106,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        Log.d(LOG_TAG, "onRequestPermissionsResult: called");
+        Log.d(LOG_TAG, "onMapReady: called");
 
-        googleMap.setIndoorEnabled(false);
         mMap = googleMap;
 
-        // Sets the min and max zoom preferences
-        // Min zoom preferences - Landmass/continent
-        // Max zoom preferences - building
-        mMap.setMinZoomPreference(5.0f);
-        mMap.setMaxZoomPreference(20.0f);
+        if (mLocationPermissionGranted) {
+            getDeviceLocation();
 
-        // Add a marker in London and move the camera
-        LatLng london = OPENING_LOCATION_LATLNG;
-        mMap.addMarker(new MarkerOptions().position(london).title("Marker in London"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(london));
+            if (ActivityCompat.checkSelfPermission(this, FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                    (this, COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
 
-        // Animate the camera to the center of London
-        // Zoom closer into the map at the street level
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+            mMap.setMyLocationEnabled(true);
+            mMap.setIndoorEnabled(false);
+
+            // Hide the default button that centres map to the current user location
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+            // Sets the min zoom preference - landmass/continent and max zoom preference - buildings
+            mMap.setMinZoomPreference(5f);
+            mMap.setMaxZoomPreference(20f);
+        }
     }
 
     @Override
@@ -127,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         /*
         if(isServicesValid()) {
         }*/
-
 
         initAutocompleteFragment();
 
@@ -159,7 +175,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /*
-    *
+     * This method gets the location permissions from the user to use Google Play services.
+     */
+    private void getLocationPermission() {
+        Log.d(LOG_TAG, "Getting location permissions");
+
+        String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        permissions,
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    /*
+     * This method initialises the map and the map fragment.
      */
     private void initMap() {
         Log.d(LOG_TAG, "Initialising Google map...");
@@ -170,21 +210,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /*
-    *
+    * This method gets the device location from the user.
      */
-    private void getLocationPermission() {
-        Log.d(LOG_TAG, "Getting location permissions");
+    private void getDeviceLocation() {
+        Log.d(LOG_TAG, "getDeviceLocation: getting the device's current location");
 
-        String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationPermissionGranted = true;
+        mFusedLocatonProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try {
+            if (mLocationPermissionGranted) {
+                Task location = mFusedLocatonProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Log.d(LOG_TAG, "onComplete: found location");
+                            Location currentLocation = (Location) task.getResult();
+
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
+                        } else {
+                            Log.d(LOG_TAG, "onComplete: current location is location");
+                            Toast.makeText(MainActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
             }
-        } else {
-            ActivityCompat.requestPermissions(this, permissions
-                    , LOCATION_PERMISSION_REQUEST_CODE);
+        } catch (SecurityException e) {
+            Log.d(LOG_TAG, "getDeviceLocation: SecurityException " + e.getMessage());
         }
     }
 
@@ -212,6 +265,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
         }
     }
+
+    /*
+     * This method moves the Google Map camera based on LatLng and the camera zoom.
+     *
+     * @param latLng The location to move the camera to.
+     * @param zoom The zoom the camera should focus up to.
+     */
+    private void moveCamera(LatLng latLng, float zoom) {
+        Log.d(LOG_TAG, "Moving camera to latitude: " + latLng.latitude + "and  longitude: "
+                + latLng.longitude + " with camera zoom: " + zoom);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
 
     /*
      * This method checks if the version of Google Play services the user has installed is valid.
