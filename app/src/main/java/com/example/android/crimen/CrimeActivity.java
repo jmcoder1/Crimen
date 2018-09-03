@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Loader;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -34,10 +33,6 @@ public class CrimeActivity extends AppCompatActivity
 
     // Tag for logging and debugging messages
     public static final String LOG_TAG = CrimeActivity.class.getName();
-
-    // The string for the URL request
-    // TODO: Remove this placeholder if all works
-    //private static final String CRIME_DATA_REQ = "https://data.police.uk/api/crimes-at-location?date=2017-02&lat=52.629729&lng=-1.131592";
 
     // The string for the URL request
     private String mCrimeDataRequest;
