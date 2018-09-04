@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -28,28 +27,23 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
-
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -115,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        Log.d(LOG_TAG, "onMapReady: called");
+        Log.d(LOG_TAG, "onMapReady: map is ready");
 
         mMap = googleMap;
 
@@ -138,8 +132,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Sets the min zoom preference - landmass/continent and max zoom preference - buildings
             mMap.setMinZoomPreference(5f);
             mMap.setMaxZoomPreference(20f);
+
+            init();
         }
-        init();
     }
 
     @Override
@@ -160,8 +155,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         getLocationPermission();
         //if(isServicesValid()) {}
     }
-
-
 
     /**
      * This method initialises widgets and fragment on the map view.
@@ -273,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionGranted = true;
+                initMap();
         } else {
             ActivityCompat.requestPermissions(this, permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
