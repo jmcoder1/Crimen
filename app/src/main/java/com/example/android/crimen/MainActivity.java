@@ -5,11 +5,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,8 @@ import com.google.android.gms.location.places.PlaceDetectionClient;
 
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -96,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // The default initial zoom of the map
     private static final float DEFAULT_ZOOM = 15f;
 
+    // The 'my location' gps button that centres the user to their device location
+    private FloatingActionButton mMyLocationFab;
+
     /**
      * Manipulates the map once available. This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera.
@@ -128,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Sets the min zoom preference - landmass/continent and max zoom preference - buildings
             mMap.setMinZoomPreference(5f);
             mMap.setMaxZoomPreference(20f);
+
+            init();
         }
     }
 
@@ -139,39 +148,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mMyLocationFab = (FloatingActionButton) findViewById(R.id.ic_my_location);
+
+        setFloatingActionButtonColors(mMyLocationFab,
+                getResources().getColor(R.color.lightWidgetBakground),
+                getResources().getColor(R.color.lightWidgetBakground));
+
         getLocationPermission();
+        //if(isServicesValid()) {}
 
-        /*
-        if(isServicesValid()) {
-        }*/
+    }
 
-        initAutocompleteFragment();
+    /*
+    *
+     */
+    private void setFloatingActionButtonColors(FloatingActionButton fab, int primaryColor, int rippleColor) {
+        int[][] states = {
+                {android.R.attr.state_enabled},
+                {android.R.attr.state_pressed},
+        };
 
-        // Activity for when a place is from the search bar
-        mAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                LatLng placeLatLng = place.getLatLng();
-                mRequestUrl = getUrlFromPlace(place, DATE);
+        int[] colors = {
+                primaryColor,
+                rippleColor,
+        };
 
-                // Gets information about crime at the chosen Place
-                // Passes the location specific information on
-                Intent crimesIntent = new Intent(MainActivity.this, CrimeActivity.class);
-                Bundle b = new Bundle();
-                b.putString("url", mRequestUrl);
-                crimesIntent.putExtra("urlDataBundle", b);
-                startActivity(crimesIntent);
-
-                Log.i(LOG_TAG, "Place: " + place.getName());
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(LOG_TAG, "An error occurred: " + status);
-            }
-        });
-
+        ColorStateList colorStateList = new ColorStateList(states, colors);
+        fab.setBackgroundTintList(colorStateList);
     }
 
     /*
@@ -350,12 +353,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /*
-    * This method initialises the autocomplete fragment (search bar).
+    * This method initialises widgets and fragment on the map view.
     *
+    * It begins by initalising the autcomplete search bar fragment.
     * Bounds: the searchable results from the GooglePlaces API is limited to the Great Britain.
     *
      */
-    private void initAutocompleteFragment() {
+    private void init() {
 
         // Get the floating search bar view
         mAutocompleteFragment = (PlaceAutocompleteFragment)
@@ -369,6 +373,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Filter the autocomplete fragment to the specific bounds set
         mAutocompleteFragment.setFilter(autocompleteFilter);
+
+        // Activity for when a place is from the search bar
+        mAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                LatLng placeLatLng = place.getLatLng();
+                mRequestUrl = getUrlFromPlace(place, DATE);
+
+                // Moves the camera to the place selected
+                moveCamera(placeLatLng, DEFAULT_ZOOM);
+
+                // Gets information about crime at the chosen Place
+                // Passes the location specific information on
+                Intent crimesIntent = new Intent(MainActivity.this, CrimeActivity.class);
+                Bundle b = new Bundle();
+                b.putString("url", mRequestUrl);
+                crimesIntent.putExtra("urlDataBundle", b);
+                startActivity(crimesIntent);
+
+                Log.i(LOG_TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(LOG_TAG, "An error occurred: " + status);
+            }
+        });
+
+        mMyLocationFab.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d(LOG_TAG, "mGpsWidget: clicked GPS widget");
+        }
+    });
     }
 
 

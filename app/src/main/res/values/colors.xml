@@ -7,4 +7,7 @@
     <!-- Colours for the TextViews in list_item.xml -->
     <color name="textColorCrimeDetails">#B4BAC0</color>
     <color name="textColorCrimeLocation">#2B3D4D</color>
+
+    <!-- Colours for the map widgets -->
+    <color name="lightWidgetBakground">#ffffff</color>
 </resources>

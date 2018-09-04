@@ -4,8 +4,25 @@
     <!-- Autcomplete dimensions for the persistent search bar -->
 
     <!-- Padding for the autcomplete search bar floating at the top. -->
-    <dimen name="searchview_inset">12dp</dimen>
+    <dimen name="searchview_inset">20sp</dimen>
 
     <!-- Radius for the card view behind the autocomplete search bar -->
     <dimen name="search_view_corner_radius">3dp</dimen>
+
+    <!-- Dimensions for the map widgets -->
+
+        <!-- Widget margins -->
+        <dimen name="ic_widget_margin">16dp</dimen>
+        <dimen name="ic_widget_inner_padding">8dp</dimen>
+
+        <!-- Dimensions of the GPS icon widget -->
+        <dimen name="ic_gps_height">40dp</dimen>
+        <dimen name="ic_gps_width">40dp</dimen>
+        <dimen name="ic_gps_elevation">4dp</dimen>
+
+
+    <!-- Dimensions for the magnifying glass icon that focuses on current user location. -->
+        <dimen name="ic_magnify_height">15dp</dimen>
+        <dimen name="ic_magnify_width">15dp</dimen>
+
 </resources>
