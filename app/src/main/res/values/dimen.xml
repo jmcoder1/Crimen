@@ -4,7 +4,7 @@
     <!-- Autcomplete dimensions for the persistent search bar -->
 
     <!-- Padding for the autcomplete search bar floating at the top. -->
-    <dimen name="searchview_inset">20sp</dimen>
+    <dimen name="searchview_inset">12dp</dimen>
 
     <!-- Radius for the card view behind the autocomplete search bar -->
     <dimen name="search_view_corner_radius">3dp</dimen>
